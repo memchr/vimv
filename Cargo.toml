@@ -12,6 +12,8 @@ readme = "readme.md"
 [dependencies]
 arguably = "2.2.0"
 edit = "0.1.4"
-trash = "3.0.1"
 rand = "0.8.5"
 colored = "2.0"
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+trash = "3.0.1"

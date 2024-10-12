@@ -254,9 +254,16 @@ fn main() {
     }
 
     // Deletion loop. We haven't made any changes to the file system up to this point.
+    #[cfg(not(target_os = "android"))]
     for input_file in delete_list {
         delete_file(input_file, parser.found("quiet"));
     }
+
+    #[cfg(target_os = "android")]
+    if !delete_list.is_empty() {
+        eprintln!("error: deletion not supported on Android")
+    }
+
 
     // Rename loop.
     for (input_file, output_file) in rename_list {
@@ -283,6 +290,7 @@ fn get_temp_filename(base: &str) -> String {
 
 
 // Move the specified file to the system's trash/recycle bin.
+#[cfg(not(target_os = "android"))]
 fn delete_file(input_file: &str, quiet: bool) {
     if !quiet {
         println!("{} {}", "Deleting".green().bold(), input_file);
